@@ -16,6 +16,12 @@ export default function Dashboard() {
     ${AnalyzeButton()}
     ${InsightsCard()}
 
+    <!-- 👑 UNLOCK PRO BUTTON -->
+    <button onclick="unlockPro()"
+      class="w-full py-2 mt-3 bg-yellow-500 text-black font-bold rounded-xl">
+      Unlock Pro
+    </button>
+
     <!-- 🤖 AUTO SIGNAL BUTTON -->
     <button onclick="startAuto()"
       class="w-full py-2 mt-3 bg-green-600 rounded-xl font-bold">
@@ -43,7 +49,7 @@ export default function Dashboard() {
   `;
 }
 
-/* ✅ FUNCTIONS (OUTSIDE COMPONENT) */
+/* ✅ FUNCTIONS */
 
 // Strategy page
 window.openStrategy = function () {
@@ -62,8 +68,13 @@ window.openStrategy = function () {
   `;
 };
 
-// 🤖 Auto Signal trigger
+// Auto signals
 window.startAuto = function () {
   startAutoSignal();
   alert("Auto Signal Started 🤖");
+};
+
+// 👑 Unlock Pro
+window.unlockPro = function () {
+  alert("Pro feature coming soon 🚀");
 };
