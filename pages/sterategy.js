@@ -1,5 +1,5 @@
 import { getCandles } from "../services/api.js";
-import { runBacktest } from "../core/strategyEngine.js";
+import { runCustomStrategy } from "../core/strategyEngine.js";
 
 export default function StrategyPage() {
   return `
@@ -7,7 +7,20 @@ export default function StrategyPage() {
 
       <h2 class="text-lg font-bold">Strategy Builder</h2>
 
-      <button onclick="runTest()"
+      <!-- Trend -->
+      <select id="trend" class="w-full p-2 bg-gray-900 rounded">
+        <option value="ANY">Any Trend</option>
+        <option value="UP">Uptrend</option>
+        <option value="DOWN">Downtrend</option>
+      </select>
+
+      <!-- Pattern -->
+      <select id="pattern" class="w-full p-2 bg-gray-900 rounded">
+        <option value="BULLISH_ENGULFING">Bullish Engulfing</option>
+        <option value="BEARISH_ENGULFING">Bearish Engulfing</option>
+      </select>
+
+      <button onclick="runCustomTest()"
         class="w-full py-3 bg-cyan-400 text-black rounded-xl">
         Run Backtest
       </button>
@@ -20,9 +33,14 @@ export default function StrategyPage() {
   `;
 }
 
-window.runTest = async function () {
+window.runCustomTest = async function () {
+  const trend = document.getElementById("trend").value;
+  const pattern = document.getElementById("pattern").value;
+
+  const config = { trend, pattern };
+
   const candles = await getCandles("5min");
-  const result = runBacktest(candles);
+  const result = runCustomStrategy(candles, config);
 
   document.getElementById("resultBox").innerHTML = `
     <p>Total Trades: ${result.total}</p>
