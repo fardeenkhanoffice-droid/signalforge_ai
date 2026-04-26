@@ -1,0 +1,9 @@
+{
+  "name": "SignalForge AI",
+  "short_name": "SignalForge",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0F1C",
+  "theme_color": "#0A0F1C",
+  "icons": []
+}
