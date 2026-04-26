@@ -12,6 +12,7 @@ export default function Dashboard() {
     ${AnalyticsCard()}
     ${SignalCard()}
     ${AnalyzeButton()}
+    ${InsightsCard()}
 
     <!-- 📘 JOURNAL BUTTON -->
     <button onclick="toggleJournal()"
