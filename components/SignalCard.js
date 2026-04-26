@@ -9,16 +9,26 @@ export default function SignalCard() {
           Waiting for analysis...
         </p>
       </div>
+
+      <div class="flex gap-2 mt-4">
+        <button onclick="markWin()"
+          class="flex-1 py-2 bg-green-500 rounded-xl font-bold">
+          WIN
+        </button>
+
+        <button onclick="markLoss()"
+          class="flex-1 py-2 bg-red-500 rounded-xl font-bold">
+          LOSS
+        </button>
+      </div>
     </div>
   `;
 }
 
 export function updateSignalUI(result) {
   const box = document.getElementById("signalBox");
-
   if (!box) return;
 
-  // No result or invalid signal
   if (!result || !result.signal) {
     box.innerHTML = `
       <p class="text-yellow-400 font-bold">No Trade</p>
@@ -29,7 +39,6 @@ export function updateSignalUI(result) {
     return;
   }
 
-  // Color based on signal
   const color =
     result.signal === "CALL"
       ? "text-green-400"
@@ -50,4 +59,42 @@ export function updateSignalUI(result) {
       ${result.reason || ""}
     </p>
   `;
+}
+
+/* ✅ RESULT BUTTON LOGIC */
+
+window.markWin = function () {
+  if (!window.lastSignal) {
+    alert("No signal to mark");
+    return;
+  }
+
+  console.log("WIN:", window.lastSignal);
+  alert("Marked as WIN ✅");
+
+  saveResult("WIN");
+};
+
+window.markLoss = function () {
+  if (!window.lastSignal) {
+    alert("No signal to mark");
+    return;
+  }
+
+  console.log("LOSS:", window.lastSignal);
+  alert("Marked as LOSS ❌");
+
+  saveResult("LOSS");
+};
+
+function saveResult(status) {
+  const history = JSON.parse(localStorage.getItem("tradeHistory")) || [];
+
+  history.push({
+    ...window.lastSignal,
+    result: status,
+    time: new Date().toLocaleString(),
+  });
+
+  localStorage.setItem("tradeHistory", JSON.stringify(history));
 }
