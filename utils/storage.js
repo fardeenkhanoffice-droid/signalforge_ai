@@ -1,6 +1,11 @@
 export function saveTrade(trade) {
   const history = JSON.parse(localStorage.getItem("trades")) || [];
-  history.push(trade);
+
+  history.push({
+    ...trade,
+    note: trade.note || "",
+  });
+
   localStorage.setItem("trades", JSON.stringify(history));
 }
 
