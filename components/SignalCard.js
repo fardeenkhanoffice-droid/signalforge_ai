@@ -10,6 +10,11 @@ export default function SignalCard() {
         </p>
       </div>
 
+      <!-- ✅ NOTE INPUT -->
+      <input id="tradeNote"
+        placeholder="Add note (optional)"
+        class="w-full mt-3 p-2 rounded bg-gray-800 text-white text-sm"/>
+
       <div class="flex gap-2 mt-4">
         <button onclick="markWin()"
           class="flex-1 py-2 bg-green-500 rounded-xl font-bold">
@@ -61,40 +66,42 @@ export function updateSignalUI(result) {
   `;
 }
 
-/* ✅ RESULT BUTTON LOGIC */
+/* ✅ RESULT BUTTON LOGIC WITH NOTE */
 
 window.markWin = function () {
   if (!window.lastSignal) {
-    alert("No signal to mark");
-    return;
+    return alert("No signal to mark");
   }
 
-  console.log("WIN:", window.lastSignal);
-  alert("Marked as WIN ✅");
-
   saveResult("WIN");
+  alert("Marked as WIN ✅");
 };
 
 window.markLoss = function () {
   if (!window.lastSignal) {
-    alert("No signal to mark");
-    return;
+    return alert("No signal to mark");
   }
 
-  console.log("LOSS:", window.lastSignal);
-  alert("Marked as LOSS ❌");
-
   saveResult("LOSS");
+  alert("Marked as LOSS ❌");
 };
 
 function saveResult(status) {
   const history = JSON.parse(localStorage.getItem("tradeHistory")) || [];
 
+  // ✅ GET NOTE VALUE
+  const noteInput = document.getElementById("tradeNote");
+  const note = noteInput ? noteInput.value : "";
+
   history.push({
     ...window.lastSignal,
     result: status,
+    note: note, // ✅ save note
     time: new Date().toLocaleString(),
   });
 
   localStorage.setItem("tradeHistory", JSON.stringify(history));
+
+  // ✅ optional: clear input after save
+  if (noteInput) noteInput.value = "";
 }
