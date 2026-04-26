@@ -3,6 +3,7 @@ import RiskCard from "../components/RiskCard.js";
 import SignalCard from "../components/SignalCard.js";
 import AnalyzeButton from "../components/AnalyzeButton.js";
 import AnalyticsCard from "../components/AnalyticsCard.js";
+import InsightsCard from "../components/InsightsCard.js";
 
 export default function Dashboard() {
   return `
