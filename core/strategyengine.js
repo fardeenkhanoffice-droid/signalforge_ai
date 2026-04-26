@@ -1,4 +1,4 @@
-export function runBacktest(candles) {
+export function runCustomStrategy(candles, config) {
   if (!candles || candles.length < 20) {
     return { total: 0, wins: 0, losses: 0, winRate: 0 };
   }
@@ -16,19 +16,42 @@ export function runBacktest(candles) {
     const curr = parsed[i];
     const next = parsed[i + 1];
 
-    // Example strategy: bullish engulfing
-    const bullish =
+    // 🧠 TREND CHECK
+    let trend = curr.close > prev.close ? "UP" : "DOWN";
+    if (config.trend !== "ANY" && trend !== config.trend) continue;
+
+    // 🕯️ PATTERN CHECK
+    let bullish =
       prev.close < prev.open &&
       curr.close > curr.open &&
       curr.close > prev.open;
 
-    if (bullish) {
-      // Check result using next candle
-      if (next.close > curr.close) {
-        wins++;
-      } else {
-        losses++;
-      }
+    let bearish =
+      prev.close > prev.open &&
+      curr.close < curr.open &&
+      curr.close < prev.open;
+
+    let matchPattern = false;
+
+    if (config.pattern === "BULLISH_ENGULFING" && bullish) {
+      matchPattern = true;
+    }
+
+    if (config.pattern === "BEARISH_ENGULFING" && bearish) {
+      matchPattern = true;
+    }
+
+    if (!matchPattern) continue;
+
+    // 🎯 RESULT SIMULATION
+    if (config.pattern === "BULLISH_ENGULFING") {
+      if (next.close > curr.close) wins++;
+      else losses++;
+    }
+
+    if (config.pattern === "BEARISH_ENGULFING") {
+      if (next.close < curr.close) wins++;
+      else losses++;
     }
   }
 
