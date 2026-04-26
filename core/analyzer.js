@@ -14,12 +14,12 @@ export function analyzeMarket(candles) {
   const latest = parsed[0];
   const prev = parsed[1];
 
-  // 🧠 TREND DETECTION (improved)
+  // 🧠 TREND DETECTION
   let trend = "SIDEWAYS";
   if (latest.close > prev.close) trend = "UP";
   if (latest.close < prev.close) trend = "DOWN";
 
-  // 🕯️ CANDLE PATTERN DETECTION
+  // 🕯️ PATTERNS
   const isBullishEngulfing =
     prev.close < prev.open &&
     latest.close > latest.open &&
@@ -32,7 +32,7 @@ export function analyzeMarket(candles) {
     latest.open > prev.close &&
     latest.close < prev.open;
 
-  // 📊 SUPPORT / RESISTANCE (basic zone)
+  // 📊 SUPPORT / RESISTANCE
   const highs = parsed.slice(0, 10).map(c => c.high);
   const lows = parsed.slice(0, 10).map(c => c.low);
 
@@ -42,7 +42,7 @@ export function analyzeMarket(candles) {
   const nearSupport = latest.close <= support * 1.002;
   const nearResistance = latest.close >= resistance * 0.998;
 
-  // 🎯 SIGNAL LOGIC (multi-condition)
+  // 🎯 SIGNAL LOGIC
   let signal = null;
   let reason = "";
   let confidence = 0;
@@ -59,18 +59,21 @@ export function analyzeMarket(candles) {
     confidence = 80;
   }
 
-  // ❌ FILTER WEAK SIGNALS
+  // ❌ NO SIGNAL
   if (!signal) {
-    return {
+    const noSignalResult = {
       signal: null,
       message: "No strong setup",
     };
+
+    window.lastSignal = noSignalResult; // ✅ save even no-signal
+    return noSignalResult;
   }
 
-  // ⏱️ EXPIRY LOGIC (YOUR REQUIREMENT)
+  // ⏱️ EXPIRY
   const expiry = "2 min";
 
-  return {
+  const finalResult = {
     signal,
     trend,
     confidence,
@@ -78,4 +81,9 @@ export function analyzeMarket(candles) {
     entry: latest.close,
     reason,
   };
+
+  // ✅ SAVE LAST SIGNAL HERE (correct place)
+  window.lastSignal = finalResult;
+
+  return finalResult;
 }
