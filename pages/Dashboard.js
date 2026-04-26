@@ -5,6 +5,7 @@ import AnalyzeButton from "../components/AnalyzeButton.js";
 import AnalyticsCard from "../components/AnalyticsCard.js";
 import InsightsCard from "../components/InsightsCard.js";
 import StrategyPage from "./Strategy.js";
+import { startAutoSignal } from "../core/autoSignal.js";
 
 export default function Dashboard() {
   return `
@@ -14,6 +15,12 @@ export default function Dashboard() {
     ${SignalCard()}
     ${AnalyzeButton()}
     ${InsightsCard()}
+
+    <!-- 🤖 AUTO SIGNAL BUTTON -->
+    <button onclick="startAuto()"
+      class="w-full py-2 mt-3 bg-green-600 rounded-xl font-bold">
+      Start Auto Signals
+    </button>
 
     <!-- 📘 JOURNAL BUTTON -->
     <button onclick="toggleJournal()"
@@ -36,11 +43,11 @@ export default function Dashboard() {
   `;
 }
 
-/* ✅ ADD THIS AT BOTTOM (OUTSIDE FUNCTION) */
+/* ✅ FUNCTIONS (OUTSIDE COMPONENT) */
 
+// Strategy page
 window.openStrategy = function () {
   const root = document.getElementById("root");
-
   if (!root) return;
 
   root.innerHTML = `
@@ -53,4 +60,10 @@ window.openStrategy = function () {
       ${StrategyPage()}
     </div>
   `;
+};
+
+// 🤖 Auto Signal trigger
+window.startAuto = function () {
+  startAutoSignal();
+  alert("Auto Signal Started 🤖");
 };
