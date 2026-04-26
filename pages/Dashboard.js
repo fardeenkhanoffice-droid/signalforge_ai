@@ -4,6 +4,7 @@ import SignalCard from "../components/SignalCard.js";
 import AnalyzeButton from "../components/AnalyzeButton.js";
 import AnalyticsCard from "../components/AnalyticsCard.js";
 import InsightsCard from "../components/InsightsCard.js";
+import StrategyPage from "./Strategy.js";
 
 export default function Dashboard() {
   return `
@@ -26,5 +27,30 @@ export default function Dashboard() {
       <h2 class="text-sm opacity-70 mb-2">Trade Journal</h2>
       <div id="journalList" class="text-xs"></div>
     </div>
+
+    <!-- 🧠 STRATEGY BUTTON -->
+    <button onclick="openStrategy()"
+      class="w-full py-2 mt-3 bg-gray-800 rounded-xl">
+      Strategy Builder
+    </button>
   `;
 }
+
+/* ✅ ADD THIS AT BOTTOM (OUTSIDE FUNCTION) */
+
+window.openStrategy = function () {
+  const root = document.getElementById("root");
+
+  if (!root) return;
+
+  root.innerHTML = `
+    <div class="p-4">
+      <button onclick="location.reload()"
+        class="mb-3 px-3 py-1 bg-gray-700 rounded">
+        ← Back
+      </button>
+
+      ${StrategyPage()}
+    </div>
+  `;
+};
