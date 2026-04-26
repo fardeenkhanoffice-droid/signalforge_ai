@@ -22,7 +22,6 @@ window.analyzeMarketNow = async function () {
 
     console.log("Analysis:", result);
 
-    // Update UI
     updateSignalUI(result);
 
     alert(`Signal: ${result.signal || "NONE"}\nTrend: ${result.trend || "N/A"}`);
@@ -32,23 +31,23 @@ window.analyzeMarketNow = async function () {
   }
 };
 
-// ✅ SAVE RESULT TO STORAGE
+// ✅ SAVE RESULT TO STORAGE + RELOAD
 
 window.markWin = function () {
   if (!window.lastSignal || !window.lastSignal.signal) {
     return alert("No signal to save");
   }
 
-  const trade = {
+  saveTrade({
     ...window.lastSignal,
     result: "WIN",
     time: new Date().toISOString(),
-  };
+  });
 
-  saveTrade(trade);
-
-  console.log("Saved WIN:", trade);
+  console.log("Saved WIN:", window.lastSignal);
   alert("Saved as WIN ✅");
+
+  window.location.reload();
 };
 
 window.markLoss = function () {
@@ -56,14 +55,14 @@ window.markLoss = function () {
     return alert("No signal to save");
   }
 
-  const trade = {
+  saveTrade({
     ...window.lastSignal,
     result: "LOSS",
     time: new Date().toISOString(),
-  };
+  });
 
-  saveTrade(trade);
-
-  console.log("Saved LOSS:", trade);
+  console.log("Saved LOSS:", window.lastSignal);
   alert("Saved as LOSS ❌");
+
+  window.location.reload();
 };
