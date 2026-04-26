@@ -1,5 +1,6 @@
 import { getCandles } from "../services/api.js";
 import { analyzeMarket } from "../core/analyzer.js";
+import { updateSignalUI } from "./SignalCard.js";
 
 export default function AnalyzeButton() {
   return `
@@ -11,12 +12,8 @@ export default function AnalyzeButton() {
 }
 
 window.analyzeMarketNow = async function () {
-  alert("Fetching market data...");
-
   const candles = await getCandles("5min");
   const result = analyzeMarket(candles);
 
-  console.log("Analysis:", result);
-
-  alert(`Signal: ${result.signal}\nTrend: ${result.trend}`);
+  updateSignalUI(result);
 };
