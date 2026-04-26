@@ -12,8 +12,21 @@ export default function AnalyzeButton() {
 }
 
 window.analyzeMarketNow = async function () {
-  const candles = await getCandles("5min");
-  const result = analyzeMarket(candles);
+  try {
+    alert("Fetching market data...");
 
-  updateSignalUI(result);
+    const candles = await getCandles("5min");
+    const result = analyzeMarket(candles);
+
+    console.log("Analysis:", result);
+
+    // Update UI
+    updateSignalUI(result);
+
+    // Optional alert summary
+    alert(`Signal: ${result.signal}\nTrend: ${result.trend}`);
+  } catch (error) {
+    console.error("Error analyzing market:", error);
+    alert("Failed to analyze market. Please try again.");
+  }
 };
