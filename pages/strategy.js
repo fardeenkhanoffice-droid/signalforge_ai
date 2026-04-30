@@ -1,5 +1,5 @@
 import { getCandles } from "../services/api.js";
-import { runCustomStrategy } from "../core/strategyEngine.js";
+import { runCustomStrategy } from "../core/StrategyEngine.js"; // ✅ FIXED CASE
 
 export default function StrategyPage() {
   return `
@@ -25,7 +25,7 @@ export default function StrategyPage() {
         Run Backtest
       </button>
 
-      <div id="resultBox" class="bg-gray-900 p-4 rounded-xl mt-3">
+      <div id="resultBox" class="bg-gray-900 p-4 rounded-xl mt-3 text-sm">
         No results yet
       </div>
 
@@ -33,19 +33,42 @@ export default function StrategyPage() {
   `;
 }
 
+/* ✅ SAFE FUNCTION */
+
 window.runCustomTest = async function () {
-  const trend = document.getElementById("trend").value;
-  const pattern = document.getElementById("pattern").value;
+  const box = document.getElementById("resultBox");
 
-  const config = { trend, pattern };
+  try {
+    const trend = document.getElementById("trend").value;
+    const pattern = document.getElementById("pattern").value;
 
-  const candles = await getCandles("5min");
-  const result = runCustomStrategy(candles, config);
+    const config = { trend, pattern };
 
-  document.getElementById("resultBox").innerHTML = `
-    <p>Total Trades: ${result.total}</p>
-    <p class="text-green-400">Wins: ${result.wins}</p>
-    <p class="text-red-400">Losses: ${result.losses}</p>
-    <p>Win Rate: ${result.winRate}%</p>
-  `;
+    box.innerHTML = "Running backtest... ⏳";
+
+    const candles = await getCandles("5min");
+
+    if (!candles || candles.length === 0) {
+      throw new Error("No market data received");
+    }
+
+    const result = runCustomStrategy(candles, config);
+
+    if (!result) {
+      throw new Error("Strategy returned no result");
+    }
+
+    box.innerHTML = `
+      <p>Total Trades: ${result.total ?? 0}</p>
+      <p class="text-green-400">Wins: ${result.wins ?? 0}</p>
+      <p class="text-red-400">Losses: ${result.losses ?? 0}</p>
+      <p>Win Rate: ${result.winRate ?? 0}%</p>
+    `;
+  } catch (err) {
+    console.error("Backtest Error:", err);
+
+    box.innerHTML = `
+      <p class="text-red-400">Error: ${err.message}</p>
+    `;
+  }
 };
