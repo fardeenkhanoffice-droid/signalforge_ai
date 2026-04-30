@@ -5,7 +5,7 @@ import AnalyzeButton from "../components/AnalyzeButton.js";
 import AnalyticsCard from "../components/AnalyticsCard.js";
 import InsightsCard from "../components/InsightsCard.js";
 import StrategyPage from "./Strategy.js";
-import { startAutoSignal } from "../core/autoSignal.js";
+import { startAutoSignal } from "../core/AutoSignal.js";
 
 export default function Dashboard() {
   return `
